@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Télécharger le Livre - La Marche avec Dieu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #c9a227;
+            --gold-light: #e8d48b;
+            --gold-dark: #8b6914;
+            --cream: #faf6ed;
+            --cream-dark: #f0e9d8;
+            --navy: #1a2a3a;
+            --navy-light: #2d4a5e;
+            --burgundy: #6b2d3c;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background: var(--cream);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--navy);
+        }
+
+        /* Background Pattern */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5L35 25H55L39 35L44 55L30 43L16 55L21 35L5 25H25L30 5Z' fill='%231a2a3a' fill-opacity='1'/%3E%3C/svg%3E");
+            background-size: 80px 80px;
+        }
+
+        /* Floating Light Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, var(--gold-light) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cross-icon {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(201, 162, 39, 0.3));
+        }
+
+        header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 600;
+            color: var(--navy);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .divider {
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 1.5rem auto;
+        }
+
+        /* Book Card */
+        .book-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 900px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 3rem;
+            box-shadow: 
+                0 25px 80px rgba(26, 42, 58, 0.12),
+                0 10px 30px rgba(26, 42, 58, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            animation: fadeInUp 1s ease-out 0.3s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light), var(--gold), var(--gold-dark));
+        }
+
+        /* Book Cover */
+        .book-cover-container {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .book-cover-image {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            border-radius: 4px 12px 12px 4px;
+            box-shadow: 
+                -5px 5px 15px rgba(0, 0, 0, 0.3),
+                0 0 5px rgba(0, 0, 0, 0.2);
+            transform: rotateY(-5deg);
+            transition: transform 0.5s ease;
+        }
+
+        .book-cover-image:hover {
+            transform: rotateY(0deg) scale(1.02);
+        }
+
+        /* Book Info */
+        .book-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .book-info h2 {
+            font-family: 'Times New Roman', serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .author-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .author-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+            box-shadow: 0 2px 8px rgba(201, 162, 39, 0.3);
+        }
+
+        .book-info .author {
+            font-size: 1rem;
+            color: var(--gold-dark);
+            font-style: italic;
+        }
+
+        .book-description {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--navy-light);
+            margin-bottom: 2rem;
+        }
+
+        .book-description p {
+            margin-bottom: 1rem;
+        }
+
+        .book-description ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .book-description li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Book Meta */
+        .book-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--cream);
+            border-radius: 12px;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-item .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--navy-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .meta-item .value {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        /* Download Button */
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 50%, var(--gold-light) 100%);
+            color: var(--navy);
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 8px 25px rgba(201, 162, 39, 0.35),
+                0 3px 10px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 12px 35px rgba(201, 162, 39, 0.45),
+                0 5px 15px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .download-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .download-btn svg {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .download-btn:hover svg {
+            transform: translateY(3px);
+        }
+
+        /* Scripture Quote */
+        .scripture {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .scripture blockquote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--navy);
+            max-width: 700px;
+            margin: 0 auto 1rem;
+            line-height: 1.6;
+        }
+
+        .scripture cite {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            color: var(--gold-dark);
+            letter-spacing: 0.1em;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            padding: 2rem;
+            text-align: center;
+            color: var(--navy-light);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--gold-dark);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--gold);
+        }
+
+        /* Success Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 42, 58, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 450px;
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.4s ease;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 20px rgba(201, 162, 39, 0);
+            }
+        }
+
+        .modal-icon svg {
+            width: 40px;
+            height: 40px;
+            color: var(--white);
+        }
+
+        .modal h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+
+        .modal p {
+            color: var(--navy-light);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-close {
+            background: var(--navy);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-family: 'Lora', serif;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--navy-light);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .book-card {
+                grid-template-columns: 1fr;
+                padding: 2rem;
+                gap: 2rem;
+            }
+
+            .book-cover-container {
+                max-width: 220px;
+                margin: 0 auto;
+            }
+
+            .book-cover-image {
+                transform: rotateY(0);
+            }
+
+            .book-meta {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .meta-item {
+                flex: 1;
+                min-width: 80px;
+            }
+
+            .download-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <header>
+            <span class="cross-icon">✝</span>
+            <h1>Centre International Zion</h1>
+            <div class="divider"></div>
+        </header>
+
+        <div class="book-card">
+            <div class="book-cover-container">
+                <!-- Remplacez "book-cover.jpg" par le chemin de votre image de couverture -->
+                <img src="couverture.jpg" alt="Couverture du livre - 100 Méthodes pour Grandir Spirituellement" class="book-cover-image">
+            </div>
+
+            <div class="book-info">
+                <h2>100 Méthodes pour Grandir Spirituellement</h2>
+                <div class="author-section">
+                    <!-- Remplacez "author-photo.jpg" par le chemin de la photo de l'auteur -->
+                    <img src="profil.jpg" alt="Photo de l'auteur" class="author-photo">
+                    <p class="author">par Divin Bwishe Baraka Yasent</p>
+                </div>
+                
+                <div class="book-description">
+                    <p>Et si ta vie spirituelle pouvait vraiment grandir concrètement, jour après jour ?</p>
+                
+                    <p>Beaucoup de chrétiens désirent se rapprocher de Dieu, mais ne savent pas comment avancer de manière pratique.
+                        La bonne volonté ne suffit pas toujours. Il faut aussi des méthodes, des repères et des exercices concrets.</p>
+
+                    <p>« 100 méthodes pour grandir spirituellement » est un livre chrétien conçu pour cela.
+                        Tu y trouveras 100 techniques simples, bibliques et détaillées, applicables dans la vie quotidienne, pour :</p>
+                        <ul>
+                            <li>Approfondir ta relation avec Dieu</li>
+                            <li>Renforcer ta vie de prière</li>
+                            <li>Mieux comprendre la Parole</li>
+                            <li>Développer une discipline spirituelle durable</li>
+                            <li>Progresser même lorsque la motivation faiblit</li>
+                        </ul>
+
+                    <p>
+                        Chaque méthode est pratique, accessible et immédiatement applicable, que tu sois débutant dans la foi ou chrétien de longue date.
+                        Le livre est mis à disposition gratuitement, parce que la croissance spirituelle ne devrait jamais être réservée à quelques-uns.
+                        <br>Télécharge-le dès maintenant et commence dès aujourd'hui à poser des actions concrètes pour grandir spirituellement.
+                    </p>
+                </div>
+
+                <div class="book-meta">
+                    <div class="meta-item">
+                        <div class="label">Pages</div>
+                        <div class="value">39</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="label">Format</div>
+                        <div class="value">PDF</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="label">Taille</div>
+                        <div class="value">0.94 MB</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="label">Langue</div>
+                        <div class="value">Français</div>
+                    </div>
+                </div>
+
+                <button class="download-btn" id="downloadBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Télécharger Gratuitement
+                </button>
+            </div>
+        </div>
+
+        <div class="scripture">
+            <blockquote>
+                « Ta parole est une lampe à mes pieds, et une lumière sur mon sentier. »
+            </blockquote>
+            <cite>— Psaume 119:105</cite>
+        </div>
+
+        <footer>
+            <p>Partagé avec amour pour la gloire de Dieu</p>
+        </footer>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+            </div>
+            <h3>Téléchargement lancé !</h3>
+            <p>Que ce livre soit une bénédiction dans votre marche avec le Seigneur. Bonne lecture et que Dieu vous accompagne.</p>
+            <button class="modal-close" id="modalClose">Amen</button>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particle.style.width = (4 + Math.random() * 6) + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+
+        // Modal functionality
+        const downloadBtn = document.getElementById('downloadBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalClose = document.getElementById('modalClose');
+
+        downloadBtn.addEventListener('click', function() {
+            // Simulate download - replace with actual PDF URL
+            const pdfUrl = '100_METHODES_POUR_GRANDIR_DANS_LA_SPIRITUELLEMENT.pdf'; // Remplacez par l'URL réelle du PDF
+            
+            // Create a temporary link to trigger download
+            const link = document.createElement('a');
+            link.href = pdfUrl;
+            link.download = 'La-Marche-avec-Dieu.pdf';
+            link.click();
+
+            // Show success modal
+            modalOverlay.classList.add('active');
+        });
+
+        modalClose.addEventListener('click', function() {
+            modalOverlay.classList.remove('active');
+        });
+
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
+            }
+        });
+
+        // Initialize
+        createParticles();
+
+        // Add subtle parallax effect on mouse move
+        document.addEventListener('mousemove', function(e) {
+            const particles = document.querySelectorAll('.particle');
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            
+            particles.forEach((particle, index) => {
+                const speed = (index % 3 + 1) * 0.5;
+                particle.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
